@@ -65,7 +65,7 @@ export const config = {
     // PENTING: Bisa pakai link MP3 (akhiran .mp3) ATAU link YouTube biasa.
     // Contoh Youtube: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
     // Contoh MP3: "/music/wedding-song.mp3" (Simpan di public/music/)
-    source: "https://www.youtube.com/watch?v=lB8ASupNtlw", 
+    source: "https://www.youtube.com/watch?v=5qap5aO4i9A", 
   },
 
   // 7. GAMBAR & GALERI

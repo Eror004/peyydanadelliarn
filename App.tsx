@@ -87,6 +87,7 @@ const App: React.FC = () => {
             toggleMusic={toggleMusic} 
             activeSection={activeSection}
             openRSVP={() => scrollToSection('rsvp')}
+            goToMap={() => scrollToSection('events')}
         />
       )}
     </div>
