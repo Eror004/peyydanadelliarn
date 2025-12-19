@@ -56,28 +56,33 @@ export const config = {
       number: "1234567890",
       holder: "Mpey (Contoh)",
     },
-    // Ganti URL ini dengan URL gambar QRIS kamu sendiri
-    qrisUrl: "https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=MpeyAndAdelliarnWeddingGift&bgcolor=ffffff&color=121212&margin=10",
+    // Ganti URL ini dengan URL gambar QRIS kamu sendiri (Simpan di public/images/qris.jpg)
+    qrisUrl: "/images/qris.jpg",
   },
 
   // 6. AUDIO / MUSIK
   audio: {
-    // URL file MP3 (bisa dari aset lokal atau link eksternal)
-    source: "https://assets.mixkit.co/music/preview/mixkit-beautiful-dream-493.mp3",
+    // PENTING: Bisa pakai link MP3 (akhiran .mp3) ATAU link YouTube biasa.
+    // Contoh Youtube: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    // Contoh MP3: "/music/wedding-song.mp3" (Simpan di public/music/)
+    source: "https://www.youtube.com/watch?v=5qap5aO4i9A", 
   },
 
   // 7. GAMBAR & GALERI
+  // Pastikan kamu membuat folder "images" di dalam folder "public"
+  // Lalu masukkan file gambar sesuai nama di bawah ini.
   images: {
     // Foto Utama di Halaman Depan
-    hero: "https://picsum.photos/600/800?random=1", 
+    hero: "/images/hero.jpg", 
     
     // Foto-foto di bagian Story/Gallery
+    // Simpan file sebagai 1.jpg, 2.jpg, dst di folder public/images/
     gallery: [
-      "https://picsum.photos/400/500?random=10",
-      "https://picsum.photos/400/500?random=11",
-      "https://picsum.photos/400/500?random=12",
-      "https://picsum.photos/400/500?random=13",
-      "https://picsum.photos/400/500?random=14",
+      "/images/1.jpg",
+      "/images/2.jpg",
+      "/images/3.jpg",
+      "/images/4.jpg",
+      "/images/5.jpg",
     ]
   },
 

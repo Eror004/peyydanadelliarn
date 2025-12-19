@@ -1,5 +1,5 @@
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { Splash } from './components/Splash';
 import { Section } from './components/Section';
@@ -12,13 +12,13 @@ import { RSVP } from './components/RSVP';
 import { Wishes } from './components/Wishes';
 import { Gift } from './components/Gift';
 import { Footer } from './components/Footer';
+import { MusicPlayer } from './components/MusicPlayer';
 import { config } from './site-config';
 
 const App: React.FC = () => {
   const [isOpened, setIsOpened] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
-  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -41,21 +41,14 @@ const App: React.FC = () => {
 
   const handleOpen = () => {
     setIsOpened(true);
-    setIsPlaying(true);
-    if (audioRef.current) {
-      audioRef.current.play().catch(e => console.log("Autoplay blocked", e));
-    }
+    // Slight delay to ensure DOM is ready for Youtube/Audio trigger if needed
+    setTimeout(() => {
+        setIsPlaying(true);
+    }, 100);
   };
 
   const toggleMusic = () => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.play();
-      }
-      setIsPlaying(!isPlaying);
-    }
+    setIsPlaying(!isPlaying);
   };
 
   const scrollToSection = (id: string) => {
@@ -68,7 +61,8 @@ const App: React.FC = () => {
       {/* Global Noise Texture */}
       <div className="bg-noise pointer-events-none fixed inset-0 z-[9999]"></div>
 
-      <audio ref={audioRef} src={config.audio.source} loop />
+      {/* Handles both MP3 and YouTube */}
+      <MusicPlayer source={config.audio.source} isPlaying={isPlaying} />
 
       <AnimatePresence mode="wait">
         {!isOpened && <Splash key="splash" onOpen={handleOpen} />}

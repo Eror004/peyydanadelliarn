@@ -1,9 +1,12 @@
 
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, ZoomIn } from 'lucide-react';
 import { config } from '../site-config';
 
 export const Story: React.FC = () => {
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
   return (
     <div className="h-full w-full flex flex-col pt-16 bg-white overflow-hidden relative border-x-4 border-gen-dark">
         
@@ -85,19 +88,26 @@ export const Story: React.FC = () => {
                     {config.images.gallery.map((img, i) => (
                         <motion.div 
                             key={i}
-                            className="flex-none w-56 snap-center relative"
+                            className="flex-none w-56 snap-center relative cursor-zoom-in"
                             initial={{ opacity: 0, scale: 0.9 }}
                             whileInView={{ opacity: 1, scale: 1 }}
+                            onClick={() => setSelectedImage(img)}
+                            whileTap={{ scale: 0.95 }}
                         >
                             <div className={`bg-white p-2 shadow-neo border-4 border-gen-dark 
                                 ${i % 2 === 0 ? 'rotate-2' : '-rotate-2'} 
                                 hover:rotate-0 transition-all duration-300`}
                             >
-                                <div className="aspect-[3/4] overflow-hidden border-2 border-gen-dark grayscale hover:grayscale-0 transition-all">
+                                <div className="aspect-[3/4] overflow-hidden border-2 border-gen-dark grayscale hover:grayscale-0 transition-all relative group">
                                     <img src={img} alt={`Gallery ${i}`} className="w-full h-full object-cover" loading="lazy" />
+                                    
+                                    {/* Tap hint overlay */}
+                                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                        <ZoomIn className="text-white w-8 h-8 drop-shadow-md" />
+                                    </div>
                                 </div>
                                 <div className="mt-2 text-center border-t-2 border-gen-dark pt-1">
-                                    <span className="font-mono text-[10px] font-bold">IMG_00{i+1}.JPG</span>
+                                    <span className="font-mono text-[10px] font-bold">TAP TO EXPAND</span>
                                 </div>
                             </div>
                         </motion.div>
@@ -106,6 +116,47 @@ export const Story: React.FC = () => {
                 </div>
             </div>
         </div>
+
+        {/* LIGHTBOX MODAL */}
+        <AnimatePresence>
+            {selectedImage && (
+                <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    onClick={() => setSelectedImage(null)}
+                    className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 cursor-pointer"
+                >
+                    <motion.button 
+                        initial={{ scale: 0, rotate: 180 }}
+                        animate={{ scale: 1, rotate: 0 }}
+                        exit={{ scale: 0 }}
+                        className="absolute top-6 right-6 w-12 h-12 bg-white rounded-full flex items-center justify-center border-4 border-gen-dark z-50 hover:bg-gen-pink transition-colors"
+                    >
+                        <X size={24} className="text-gen-dark" />
+                    </motion.button>
+
+                    <motion.div 
+                        initial={{ scale: 0.8, y: 50 }}
+                        animate={{ scale: 1, y: 0 }}
+                        exit={{ scale: 0.8, y: 50 }}
+                        onClick={(e) => e.stopPropagation()} // Prevent close when clicking image itself
+                        className="relative max-w-full max-h-[80vh] w-auto bg-white p-2 border-4 border-gen-dark shadow-[0_0_50px_rgba(0,0,0,0.5)] rotate-1"
+                    >
+                         <img 
+                            src={selectedImage} 
+                            alt="Full View" 
+                            className="max-w-full max-h-[75vh] object-contain border-2 border-gen-dark" 
+                        />
+                         <div className="absolute -bottom-10 left-0 right-0 text-center">
+                            <span className="font-mono text-white text-xs font-bold tracking-widest bg-gen-dark px-3 py-1 rounded-full border border-white/20">
+                                FULL PREVIEW
+                            </span>
+                        </div>
+                    </motion.div>
+                </motion.div>
+            )}
+        </AnimatePresence>
     </div>
   );
 };

@@ -1,3 +1,4 @@
+
 export const calculateTimeLeft = (targetDate: string) => {
     const difference = +new Date(targetDate) - +new Date();
     let timeLeft = {
@@ -47,4 +48,10 @@ END:VCALENDAR`;
     } catch (err) {
       return false;
     }
+  };
+
+  export const getYouTubeId = (url: string) => {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
   };
