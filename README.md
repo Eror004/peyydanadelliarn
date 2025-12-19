@@ -1,20 +1,36 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
 
-# Run and deploy your AI Studio app
+# Mpey & Adelliarn Wedding Invitation 💍
 
-This contains everything you need to run your app locally.
+Website undangan pernikahan Gen Z style.
 
-View your app in AI Studio: https://ai.studio/apps/drive/1GHJAdTDG5lSZVCfVr6nK_rJf1DzWtdXg
+## Cara Menjalankan Project (Local)
 
-## Run Locally
+1.  **Pastikan Folder Project Benar**
+    Pastikan semua file (App.tsx, index.tsx, package.json, dll) berada di dalam satu folder.
 
-**Prerequisites:**  Node.js
+2.  **Install Dependencies**
+    Buka terminal di folder ini, lalu ketik:
+    ```bash
+    npm install
+    ```
 
+3.  **Download Aset Gambar**
+    Jalankan script otomatis untuk membuat folder `public/images` dan mengunduh gambar contoh:
+    ```bash
+    npm run setup-assets
+    ```
+    *Atau jalankan manual: `node setup-assets.js`*
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+4.  **Jalankan Website**
+    Ketik perintah ini untuk memulai:
+    ```bash
+    npm run dev
+    ```
+    Buka link yang muncul (biasanya `http://localhost:5173`) di browser.
+
+## Struktur Folder
+
+- `components/` - Komponen UI (Hero, Story, RSVP, dll)
+- `public/images/` - Tempat menyimpan foto asli kamu (Ganti foto di sini!)
+- `site-config.ts` - Pengaturan teks, tanggal, dan nama file gambar.
+- `index.tsx` - Entry point aplikasi.

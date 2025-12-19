@@ -56,7 +56,7 @@ export const config = {
       number: "1234567890",
       holder: "Mpey (Contoh)",
     },
-    // Ganti URL ini dengan URL gambar QRIS kamu sendiri (Simpan di public/images/qris.jpg)
+    // TIPS: Bisa ganti pakai link gambar QRIS kamu sendiri
     qrisUrl: "/images/qris.jpg",
   },
 
@@ -69,14 +69,14 @@ export const config = {
   },
 
   // 7. GAMBAR & GALERI
-  // Pastikan kamu membuat folder "images" di dalam folder "public"
-  // Lalu masukkan file gambar sesuai nama di bawah ini.
+  // CARA GANTI FOTO:
+  // Opsi A: Pakai file lokal (simpan di folder public/images/) -> contoh: "/images/hero.jpg"
+  // Opsi B: Pakai LINK INTERNET (URL) -> contoh: "https://mysite.com/fotoku.jpg"
   images: {
     // Foto Utama di Halaman Depan
     hero: "/images/hero.jpg", 
     
     // Foto-foto di bagian Story/Gallery
-    // Simpan file sebagai 1.jpg, 2.jpg, dst di folder public/images/
     gallery: [
       "/images/1.jpg",
       "/images/2.jpg",

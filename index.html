@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
   <head>
@@ -6,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>Mpey & Adelliarn | The Wedding</title>
     
-    <!-- Tailwind -->
+    <!-- Tailwind CSS (via CDN for simplicity in dev, but standard setup usually imports css) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -28,7 +29,6 @@
               body: ['"Plus Jakarta Sans"', 'sans-serif'],
               mono: ['"Space Mono"', 'monospace'],
               script: ['"Great Vibes"', 'cursive'],
-              // New Gen Z Fonts
               heavy: ['"Dela Gothic One"', 'cursive'],
               glitch: ['"Rubik Glitch"', 'cursive'],
             },
@@ -124,19 +124,20 @@
         }
       }
     </style>
-    <script type="importmap">
-    {
-      "imports": {
-        "react": "https://esm.sh/react@18.2.0",
-        "react/": "https://esm.sh/react@18.2.0/",
-        "react-dom": "https://esm.sh/react-dom@18.2.0",
-        "react-dom/": "https://esm.sh/react-dom@18.2.0/",
-        "lucide-react": "https://esm.sh/lucide-react@0.344.0?external=react",
-        "framer-motion": "https://esm.sh/framer-motion@11.0.8?external=react,react-dom"
-      }
-    }
-    </script>
-  </head>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "framer-motion": "https://esm.sh/framer-motion@^12.23.26",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
+    "vite": "https://esm.sh/vite@^7.3.0"
+  }
+}
+</script>
+</head>
   <body>
     <div id="root"></div>
     <script type="module" src="./index.tsx"></script>
