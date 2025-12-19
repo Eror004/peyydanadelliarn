@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { Splash } from './components/Splash';
@@ -11,7 +12,7 @@ import { RSVP } from './components/RSVP';
 import { Wishes } from './components/Wishes';
 import { Gift } from './components/Gift';
 import { Footer } from './components/Footer';
-import { AUDIO_URL } from './constants';
+import { config } from './site-config';
 
 const App: React.FC = () => {
   const [isOpened, setIsOpened] = useState(false);
@@ -67,7 +68,7 @@ const App: React.FC = () => {
       {/* Global Noise Texture */}
       <div className="bg-noise pointer-events-none fixed inset-0 z-[9999]"></div>
 
-      <audio ref={audioRef} src={AUDIO_URL} loop />
+      <audio ref={audioRef} src={config.audio.source} loop />
 
       <AnimatePresence mode="wait">
         {!isOpened && <Splash key="splash" onOpen={handleOpen} />}

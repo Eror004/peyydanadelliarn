@@ -1,8 +1,9 @@
+
 import React, { useState } from 'react';
 import { motion, Variants } from 'framer-motion';
 import { Send, CheckCircle2, MessageCircle, Star, Mail } from 'lucide-react';
-import { WA_NUMBER } from '../constants';
 import { RsvpStatus, SessionType } from '../types';
+import { config } from '../site-config';
 
 export const RSVP: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -22,8 +23,8 @@ export const RSVP: React.FC = () => {
   };
 
   const generateWALink = () => {
-    const text = `Halo Mpey & Adelliarn, aku ingin RSVP.\nNama: ${formData.name}\nStatus: ${formData.status}\nJumlah: ${formData.guests}\nSesi: ${formData.session}\nUcapan: ${formData.message}`;
-    return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
+    const text = `Halo ${config.couple.names.full}, aku ingin RSVP.\nNama: ${formData.name}\nStatus: ${formData.status}\nJumlah: ${formData.guests}\nSesi: ${formData.session}\nUcapan: ${formData.message}`;
+    return `https://wa.me/${config.contact.whatsapp}?text=${encodeURIComponent(text)}`;
   };
 
   // Animation Variants

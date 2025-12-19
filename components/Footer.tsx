@@ -1,14 +1,15 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Sparkles, Heart, Star } from 'lucide-react';
-import { HASHTAG } from '../constants';
 import { copyToClipboard } from '../utils';
+import { config } from '../site-config';
 
 export const Footer: React.FC = () => {
   const [copied, setCopied] = React.useState(false);
 
   const handleCopy = () => {
-    copyToClipboard(HASHTAG).then(() => {
+    copyToClipboard(config.couple.hashtag).then(() => {
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
     });
@@ -26,7 +27,7 @@ export const Footer: React.FC = () => {
             </div>
             <div className="w-full overflow-hidden">
                 <div className="animate-marquee-reverse whitespace-nowrap font-display font-black text-8xl text-transparent stroke-text-white">
-                    MPEY & ADELLIARN • FOREVER • MPEY & ADELLIARN • FOREVER • MPEY & ADELLIARN • FOREVER •
+                    {config.couple.names.full.toUpperCase()} • FOREVER • {config.couple.names.full.toUpperCase()} • FOREVER • {config.couple.names.full.toUpperCase()} • FOREVER •
                 </div>
             </div>
         </div>
@@ -119,7 +120,7 @@ export const Footer: React.FC = () => {
                 
                 <div className="relative bg-[#1a1a1a] border-2 border-white/20 px-8 py-4 rounded-full flex items-center gap-4 hover:border-gen-pink hover:bg-black transition-all shadow-2xl group-hover:scale-105">
                     <span className="font-display font-bold text-xl md:text-2xl text-white tracking-wide">
-                        {HASHTAG}
+                        {config.couple.hashtag}
                     </span>
                     <div className={`px-2 py-1 rounded flex items-center gap-1 text-[10px] font-mono font-bold transition-colors ${copied ? 'bg-green-500 text-black' : 'bg-white/10 text-gray-400 group-hover:text-white'}`}>
                         {copied ? "COPIED!" : "COPY"}

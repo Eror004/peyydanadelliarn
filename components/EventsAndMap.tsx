@@ -1,7 +1,8 @@
+
 import React from 'react';
 import { motion, Variants } from 'framer-motion';
 import { MapPin, ArrowUpRight, Ticket } from 'lucide-react';
-import { MAPS_URL, LOCATION_NAME } from '../constants';
+import { config } from '../site-config';
 
 export const EventsAndMap: React.FC = () => {
   
@@ -91,24 +92,24 @@ export const EventsAndMap: React.FC = () => {
                     className="relative bg-white border-4 border-gen-dark shadow-neo"
                 >
                     {/* Cutout circles */}
-                    <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-gen-yellow border-r-4 border-gen-dark rounded-full"></div>
-                    <div className="absolute -right-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-gen-yellow border-l-4 border-gen-dark rounded-full"></div>
+                    <div className="absolute -left-4 top-1/2 -translate-x-1/2 w-8 h-8 bg-gen-yellow border-r-4 border-gen-dark rounded-full"></div>
+                    <div className="absolute -right-4 top-1/2 -translate-x-1/2 w-8 h-8 bg-gen-yellow border-l-4 border-gen-dark rounded-full"></div>
                     
                     <div className="p-6 border-b-4 border-dashed border-gen-dark">
                         <div className="flex justify-between items-start mb-2">
-                             <h3 className="font-display font-black text-3xl">AKAD</h3>
+                             <h3 className="font-display font-black text-3xl">01</h3>
                              <Ticket size={32} className="text-gen-blue" />
                         </div>
-                        <p className="font-mono text-sm font-bold bg-gen-blue text-white inline-block px-2 border-2 border-gen-dark">SESSION 01</p>
+                        <p className="font-mono text-sm font-bold bg-gen-blue text-white inline-block px-2 border-2 border-gen-dark">{config.event.schedule.akad.title}</p>
                     </div>
                     <div className="p-4 bg-gray-50 flex justify-between items-center">
                         <div>
                             <p className="font-mono text-xs text-gray-500 uppercase">Time</p>
-                            <p className="font-display font-bold text-xl">10.00 WIB</p>
+                            <p className="font-display font-bold text-xl">{config.event.schedule.akad.time}</p>
                         </div>
                         <div className="text-right">
                              <p className="font-mono text-xs text-gray-500 uppercase">Dresscode</p>
-                             <p className="font-bold text-sm">White / Cream</p>
+                             <p className="font-bold text-sm">{config.event.schedule.akad.dresscode}</p>
                         </div>
                     </div>
                 </motion.div>
@@ -120,24 +121,24 @@ export const EventsAndMap: React.FC = () => {
                     className="relative bg-gen-dark text-white border-4 border-white shadow-neo"
                 >
                     {/* Cutout circles */}
-                    <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-gen-yellow border-r-4 border-white rounded-full"></div>
-                    <div className="absolute -right-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-gen-yellow border-l-4 border-white rounded-full"></div>
+                    <div className="absolute -left-4 top-1/2 -translate-x-1/2 w-8 h-8 bg-gen-yellow border-r-4 border-white rounded-full"></div>
+                    <div className="absolute -right-4 top-1/2 -translate-x-1/2 w-8 h-8 bg-gen-yellow border-l-4 border-white rounded-full"></div>
                     
                     <div className="p-6 border-b-4 border-dashed border-white">
                         <div className="flex justify-between items-start mb-2">
-                             <h3 className="font-display font-black text-3xl text-gen-pink">PARTY</h3>
+                             <h3 className="font-display font-black text-3xl text-gen-pink">02</h3>
                              <Ticket size={32} className="text-gen-pink" />
                         </div>
-                        <p className="font-mono text-sm font-bold bg-gen-pink text-gen-dark inline-block px-2 border-2 border-white">SESSION 02</p>
+                        <p className="font-mono text-sm font-bold bg-gen-pink text-gen-dark inline-block px-2 border-2 border-white">{config.event.schedule.resepsi.title}</p>
                     </div>
                     <div className="p-4 bg-gray-900 flex justify-between items-center">
                         <div>
                             <p className="font-mono text-xs text-gray-400 uppercase">Time</p>
-                            <p className="font-display font-bold text-xl">11.00 WIB</p>
+                            <p className="font-display font-bold text-xl">{config.event.schedule.resepsi.time}</p>
                         </div>
                         <div className="text-right">
                              <p className="font-mono text-xs text-gray-400 uppercase">Dresscode</p>
-                             <p className="font-bold text-sm">Colorful Pastel</p>
+                             <p className="font-bold text-sm">{config.event.schedule.resepsi.dresscode}</p>
                         </div>
                     </div>
                 </motion.div>
@@ -152,7 +153,7 @@ export const EventsAndMap: React.FC = () => {
             >
                 <div className="h-40 w-full bg-gray-200 border-2 border-gen-dark relative grayscale hover:grayscale-0 transition-all">
                      <iframe 
-                        src={MAPS_URL} 
+                        src={config.location.mapsEmbedUrl} 
                         width="100%" 
                         height="100%" 
                         style={{ border: 0 }} 
@@ -163,11 +164,11 @@ export const EventsAndMap: React.FC = () => {
                 </div>
                 <div className="p-3 flex items-center justify-between">
                     <div>
-                        <h4 className="font-black text-gen-dark font-display">{LOCATION_NAME}</h4>
+                        <h4 className="font-black text-gen-dark font-display">{config.location.name}</h4>
                         <p className="font-mono text-[10px] text-gray-500 uppercase font-bold mt-1">TAP BUTTON FOR DIRECTIONS</p>
                     </div>
                     <a 
-                        href="https://maps.google.com" 
+                        href={config.location.googleMapsLink} 
                         target="_blank" 
                         rel="noreferrer"
                         className="w-10 h-10 bg-gen-blue border-2 border-gen-dark flex items-center justify-center text-white hover:bg-gen-dark transition-colors"

@@ -1,25 +1,25 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, Variants } from 'framer-motion';
-import { CalendarCheck, AlarmClock, Star, Zap, Disc } from 'lucide-react';
-import { DATE_ISO, LOCATION_NAME, COUPLE_NAME } from '../constants';
+import { CalendarCheck, AlarmClock, Star, Zap } from 'lucide-react';
 import { calculateTimeLeft, generateICS } from '../utils';
+import { config } from '../site-config';
 
 export const SaveTheDate: React.FC = () => {
-  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft(DATE_ISO));
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft(config.event.dateIso));
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft(DATE_ISO));
+      setTimeLeft(calculateTimeLeft(config.event.dateIso));
     }, 1000);
     return () => clearInterval(timer);
   }, []);
 
   const icsLink = generateICS(
-    `Wedding of ${COUPLE_NAME}`,
-    DATE_ISO,
+    `Wedding of ${config.couple.names.full}`,
+    config.event.dateIso,
     "We can't wait to celebrate with you! RSVP details inside.",
-    LOCATION_NAME
+    config.location.name
   );
 
   // Animation Variants
@@ -59,7 +59,7 @@ export const SaveTheDate: React.FC = () => {
         {/* 2. Background Marquee (Diagonal) */}
         <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none select-none overflow-hidden z-0 transform -rotate-12 scale-150">
             <div className="w-[200vw] bg-white text-black font-black font-display text-9xl py-4 animate-marquee whitespace-nowrap">
-                25.05.2026 • MARK YOUR CALENDAR • 25.05.2026 • DONT MISS IT • 
+                {config.event.displayDate} • MARK YOUR CALENDAR • {config.event.displayDate} • DONT MISS IT • 
             </div>
         </div>
 
@@ -152,8 +152,8 @@ export const SaveTheDate: React.FC = () => {
                     <div className="absolute inset-0 bg-noise opacity-10"></div>
                     
                     <div className="relative z-10">
-                        <h3 className="font-display font-bold text-2xl mb-1 text-white">Senin, 25 Mei 2026</h3>
-                        <p className="font-mono text-xs text-gray-400 mb-6 uppercase tracking-widest">Akad Starts @ 10.00 WIB</p>
+                        <h3 className="font-display font-bold text-2xl mb-1 text-white">{config.event.displayDate}</h3>
+                        <p className="font-mono text-xs text-gray-400 mb-6 uppercase tracking-widest">{config.event.schedule.akad.title} @ {config.event.schedule.akad.time}</p>
                         
                         <a 
                             href={icsLink}

@@ -1,16 +1,10 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles, Star, Heart } from 'lucide-react';
-import { DATE_ISO } from '../constants';
+import { Sparkles, Star } from 'lucide-react';
+import { config } from '../site-config';
 
 export const Hero: React.FC = () => {
-  const date = new Date(DATE_ISO);
-  const formattedDate = new Intl.DateTimeFormat('id-ID', { 
-    day: 'numeric', 
-    month: 'long', 
-    year: 'numeric' 
-  }).format(date);
-
   return (
     <div className="h-full w-full flex flex-col justify-center items-center bg-gen-bg relative overflow-hidden px-4 pb-20 border-x-4 border-gen-dark">
         
@@ -18,7 +12,7 @@ export const Hero: React.FC = () => {
         <div className="absolute inset-0 flex flex-col justify-between opacity-10 pointer-events-none select-none z-0">
              {[...Array(6)].map((_, i) => (
                 <div key={i} className={`whitespace-nowrap font-display font-black text-6xl text-gen-dark ${i % 2 === 0 ? 'animate-marquee' : 'animate-marquee-reverse'}`}>
-                    LOVE • FOREVER • MPEY • ADELLIARN • 2026 • LOVE • FOREVER • MPEY • ADELLIARN • 2026 •
+                    LOVE • FOREVER • {config.couple.names.groom.toUpperCase()} • {config.couple.names.bride.toUpperCase()} • {new Date(config.event.dateIso).getFullYear()} •
                 </div>
              ))}
         </div>
@@ -63,8 +57,8 @@ export const Hero: React.FC = () => {
                 <div className="bg-white p-2 border-4 border-gen-dark shadow-neo-lg rotate-2 hover:rotate-0 transition-transform duration-300">
                     <div className="w-60 h-80 md:w-72 md:h-96 bg-gray-200 overflow-hidden relative border-2 border-gen-dark grayscale hover:grayscale-0 transition-all duration-500">
                         <img 
-                            src="https://picsum.photos/600/800?random=1" 
-                            alt="Mpey & Adelliarn" 
+                            src={config.images.hero} 
+                            alt={config.couple.names.full} 
                             className="w-full h-full object-cover"
                         />
                         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50"></div>
@@ -81,9 +75,9 @@ export const Hero: React.FC = () => {
                     className="flex flex-col items-center w-full"
                 >
                     <span 
-                        className="font-heavy block text-[3.8rem] md:text-[5.5rem] text-white tracking-tighter leading-[0.85] text-heavy-stroke drop-shadow-[4px_4px_0_rgba(255,125,170,1)]"
+                        className="font-heavy block text-[3.8rem] md:text-[5.5rem] text-white tracking-tighter leading-[0.85] text-heavy-stroke drop-shadow-[4px_4px_0_rgba(255,125,170,1)] uppercase"
                     >
-                        MPEY
+                        {config.couple.names.groom}
                     </span>
                     
                     <div className="relative my-[-15px] z-30 scale-110">
@@ -97,9 +91,9 @@ export const Hero: React.FC = () => {
                     </div>
 
                     <span 
-                        className="font-heavy block text-[3rem] md:text-[4.5rem] text-white tracking-tighter leading-[0.85] text-heavy-stroke drop-shadow-[4px_4px_0_rgba(255,125,170,1)] w-[120%]"
+                        className="font-heavy block text-[3rem] md:text-[4.5rem] text-white tracking-tighter leading-[0.85] text-heavy-stroke drop-shadow-[4px_4px_0_rgba(255,125,170,1)] w-[120%] uppercase"
                     >
-                        ADELLIARN
+                        {config.couple.names.bride}
                     </span>
                 </motion.h1>
             </div>
@@ -114,7 +108,7 @@ export const Hero: React.FC = () => {
                 <div className="bg-gen-yellow border-4 border-gen-dark px-6 py-2 shadow-neo hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all cursor-default rotate-2">
                     <p className="font-mono font-bold text-gen-dark text-sm md:text-base tracking-widest uppercase flex items-center gap-2">
                         <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-                        {formattedDate}
+                        {config.event.displayDate}
                     </p>
                 </div>
             </motion.div>

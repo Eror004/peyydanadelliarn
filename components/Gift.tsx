@@ -2,8 +2,8 @@
 import React, { useState } from 'react';
 import { motion, Variants, AnimatePresence } from 'framer-motion';
 import { Copy, Check, CreditCard, Sparkles, QrCode, Smartphone } from 'lucide-react';
-import { BANK_DETAILS, QRIS_URL } from '../constants';
 import { copyToClipboard } from '../utils';
+import { config } from '../site-config';
 
 type GiftTab = 'bank' | 'qris';
 
@@ -12,7 +12,7 @@ export const Gift: React.FC = () => {
   const [activeTab, setActiveTab] = useState<GiftTab>('bank');
 
   const handleCopy = () => {
-    copyToClipboard(BANK_DETAILS.number).then(() => {
+    copyToClipboard(config.gift.bank.number).then(() => {
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
     });
@@ -185,7 +185,7 @@ export const Gift: React.FC = () => {
                                     <div className="flex justify-between items-start">
                                         <div className="flex items-center gap-2">
                                             <CreditCard size={24} className="text-white/90" />
-                                            <span className="font-display font-bold italic text-xl tracking-wider text-white/90">{BANK_DETAILS.bank}</span>
+                                            <span className="font-display font-bold italic text-xl tracking-wider text-white/90">{config.gift.bank.name}</span>
                                         </div>
                                         <div className="flex items-center gap-1 bg-white/10 backdrop-blur-sm border border-white/20 px-2 py-1 rounded">
                                             <Sparkles size={10} className="text-yellow-300" />
@@ -197,7 +197,7 @@ export const Gift: React.FC = () => {
                                         <div className="w-full">
                                             <p className="text-[10px] text-white/50 uppercase tracking-widest mb-1 font-mono">Account Number</p>
                                             <div className="flex items-center justify-between gap-2 w-full">
-                                                <span className="font-mono text-2xl md:text-3xl tracking-widest text-shadow-sm truncate">{BANK_DETAILS.number}</span>
+                                                <span className="font-mono text-2xl md:text-3xl tracking-widest text-shadow-sm truncate">{config.gift.bank.number}</span>
                                                 
                                                 <motion.button 
                                                     whileHover={{ scale: 1.1 }}
@@ -208,7 +208,7 @@ export const Gift: React.FC = () => {
                                                     {copied ? <Check size={20} /> : <Copy size={20} />}
                                                 </motion.button>
                                             </div>
-                                            <p className="text-sm mt-4 font-bold tracking-wide uppercase text-white/80 bg-black/20 inline-block px-2 py-1 rounded">{BANK_DETAILS.name}</p>
+                                            <p className="text-sm mt-4 font-bold tracking-wide uppercase text-white/80 bg-black/20 inline-block px-2 py-1 rounded">{config.gift.bank.holder}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -237,7 +237,7 @@ export const Gift: React.FC = () => {
 
                             {/* QR Frame */}
                             <div className="relative border-4 border-gen-dark p-2 bg-white overflow-hidden group">
-                                <img src={QRIS_URL} alt="QRIS Code" className="w-full h-auto aspect-square object-contain pixelated" />
+                                <img src={config.gift.qrisUrl} alt="QRIS Code" className="w-full h-auto aspect-square object-contain pixelated" />
                                 
                                 {/* Scanning Laser Animation */}
                                 <motion.div 
@@ -256,7 +256,7 @@ export const Gift: React.FC = () => {
                             <div className="mt-4 flex justify-between items-center px-2">
                                 <div className="text-left">
                                     <p className="font-mono text-[10px] font-bold text-gray-400 uppercase">MERCHANT</p>
-                                    <p className="font-bold text-sm text-gen-dark">{BANK_DETAILS.name}</p>
+                                    <p className="font-bold text-sm text-gen-dark">{config.gift.bank.holder}</p>
                                 </div>
                                 <div className="flex gap-1">
                                     {/* Dummy Payment Icons */}

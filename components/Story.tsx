@@ -1,14 +1,7 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
-import { STORY_DATA } from '../constants';
-
-const GALLERY_IMAGES = [
-  "https://picsum.photos/400/500?random=10",
-  "https://picsum.photos/400/500?random=11",
-  "https://picsum.photos/400/500?random=12",
-  "https://picsum.photos/400/500?random=13",
-  "https://picsum.photos/400/500?random=14",
-];
+import { config } from '../site-config';
 
 export const Story: React.FC = () => {
   return (
@@ -49,7 +42,7 @@ export const Story: React.FC = () => {
             <div className="absolute left-[28px] top-0 bottom-0 w-1 border-l-4 border-dashed border-gray-300 z-0"></div>
 
             <div className="flex flex-col gap-8 py-4 px-6 relative z-10">
-                {STORY_DATA.map((item, index) => (
+                {config.story.map((item, index) => (
                     <motion.div 
                         key={index}
                         initial={{ x: -50, opacity: 0 }}
@@ -89,7 +82,7 @@ export const Story: React.FC = () => {
                 
                 {/* Horizontal Scroll */}
                 <div className="flex overflow-x-auto no-scrollbar snap-x snap-mandatory px-6 gap-6 pb-8 py-4 relative z-10">
-                    {GALLERY_IMAGES.map((img, i) => (
+                    {config.images.gallery.map((img, i) => (
                         <motion.div 
                             key={i}
                             className="flex-none w-56 snap-center relative"

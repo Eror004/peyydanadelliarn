@@ -1,6 +1,8 @@
+
 import React from 'react';
 import { motion, Variants } from 'framer-motion';
 import { Zap, Heart } from 'lucide-react';
+import { config } from '../site-config';
 
 interface SplashProps {
   onOpen: () => void;
@@ -104,7 +106,7 @@ export const Splash: React.FC<SplashProps> = ({ onOpen }) => {
                     transition={{ duration: 0.6, repeat: Infinity, repeatDelay: 1.5, ease: "backInOut" }}
                     className="absolute -top-4 -right-6 bg-gen-blue text-white font-mono text-xs px-2 py-1 border-2 border-gen-dark shadow-neo-sm z-20 origin-bottom-left"
                 >
-                    BARU!
+                    NEW!
                 </motion.div>
             </motion.div>
 
@@ -147,8 +149,8 @@ export const Splash: React.FC<SplashProps> = ({ onOpen }) => {
             </motion.div>
 
             <p className="font-mono text-xs text-center max-w-[200px] mt-6 mb-8 text-gray-500">
-            MEMUAT ASET... 99%<br/>
-            SIAP BUAT PARTY?
+            LOADING ASSETS... 99%<br/>
+            ARE YOU READY TO PARTY?
             </p>
 
             <motion.button 
@@ -159,7 +161,7 @@ export const Splash: React.FC<SplashProps> = ({ onOpen }) => {
             >
                 <div className="absolute inset-0 bg-gen-dark translate-x-2 translate-y-2 rounded-xl"></div>
                 <div className="relative bg-white border-4 border-gen-dark rounded-xl px-8 py-5 flex items-center justify-between group-hover:-translate-y-1 group-hover:-translate-x-1 transition-transform">
-                    <span className="font-display font-black text-2xl tracking-tighter">BUKA</span>
+                    <span className="font-display font-black text-2xl tracking-tighter">OPEN</span>
                     <div className="bg-gen-fuchsia p-2 rounded-lg border-2 border-gen-dark">
                         <Zap size={24} className="text-white fill-white animate-pulse-fast" />
                     </div>
@@ -170,8 +172,8 @@ export const Splash: React.FC<SplashProps> = ({ onOpen }) => {
         {/* Footer ticker */}
         <div className="relative z-10 border-t-4 border-gen-dark bg-gen-yellow p-2 overflow-hidden mx-auto w-full max-w-[calc(100%-8px)] mb-1 shadow-neo-sm">
             <div className="whitespace-nowrap animate-marquee font-mono font-bold text-sm">
-                MPEY & ADELLIARN • CATAT TANGGALNYA • 25 MEI 2026 • UNDANGAN RESMI • JANGAN DI-SKIP • 
-                MPEY & ADELLIARN • CATAT TANGGALNYA • 25 MEI 2026 • UNDANGAN RESMI • JANGAN DI-SKIP •
+                {config.couple.names.full.toUpperCase()} • MARK THE DATE • {config.event.displayDate.toUpperCase()} • OFFICIAL INVITE • DONT SKIP • 
+                {config.couple.names.full.toUpperCase()} • MARK THE DATE • {config.event.displayDate.toUpperCase()} • OFFICIAL INVITE • DONT SKIP •
             </div>
         </div>
       </motion.div>
