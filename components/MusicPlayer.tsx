@@ -11,7 +11,6 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ source, isPlaying }) =
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   
-  // Safely check if source is YouTube
   const youtubeId = source ? getYouTubeId(source) : null;
   const isYouTube = !!youtubeId;
 
@@ -29,22 +28,21 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ source, isPlaying }) =
     }
   };
 
+  // React State Handling (For toggling music via the floating button)
   useEffect(() => {
     if (isYouTube) {
       if (isPlaying) {
         sendCommand('playVideo');
-        sendCommand('unMute');
-        // Retry play for robustness
-        const t = setTimeout(() => sendCommand('playVideo'), 1000);
-        return () => clearTimeout(t);
       } else {
         sendCommand('pauseVideo');
       }
     } else {
       if (audioRef.current) {
         if (isPlaying) {
+          // We catch the error here just in case, but the main play 
+          // should happen in App.tsx handleOpen for the first time
           audioRef.current.play().catch(err => {
-            console.warn("Audio play blocked or failed:", err);
+            console.log("State-based play blocked (expected if no interaction):", err);
           });
         } else {
           audioRef.current.pause();
@@ -56,6 +54,7 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ source, isPlaying }) =
   // If YouTube
   if (isYouTube && youtubeId) {
     const origin = typeof window !== 'undefined' ? window.location.origin : '';
+    // Added allow="autoplay" explicitly
     const embedUrl = `https://www.youtube.com/embed/${youtubeId}?enablejsapi=1&autoplay=1&mute=0&controls=0&loop=1&playlist=${youtubeId}&origin=${origin}&playsinline=1&rel=0`;
 
     return (
@@ -75,9 +74,11 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ source, isPlaying }) =
   }
 
   // If Direct MP3
+  // PENTING: ID "wedding-audio" digunakan oleh App.tsx untuk memaksa play saat tombol diklik
   return (
     <audio 
-      ref={audioRef} 
+      ref={audioRef}
+      id="wedding-audio" 
       src={source} 
       loop 
       preload="auto"

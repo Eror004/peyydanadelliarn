@@ -42,15 +42,19 @@ const App: React.FC = () => {
   }, [isOpened]);
 
   const handleOpen = () => {
-    // Interaction happens HERE
+    // 1. Set State
     setIsOpened(true);
-    // Directly trigger playback state
     setIsPlaying(true);
     
-    // Safety check for mobile: force re-play after a small tick
-    setTimeout(() => {
-        setIsPlaying(true);
-    }, 100);
+    // 2. FORCE PLAY AUDIO DIRECTLY (Bypasses Browser Autoplay Block)
+    // This connects the "Click" directly to the "Play" command
+    const audioElement = document.getElementById('wedding-audio') as HTMLAudioElement;
+    if (audioElement) {
+        audioElement.volume = 0.6; // Set volume to 60% so it's not too loud
+        audioElement.play().catch((e) => {
+            console.error("Audio play failed:", e);
+        });
+    }
   };
 
   const toggleMusic = () => {
@@ -67,7 +71,7 @@ const App: React.FC = () => {
       {/* Global Noise Texture */}
       <div className="bg-noise pointer-events-none fixed inset-0 z-[9999]"></div>
 
-      {/* Handles both MP3 and YouTube with optimized logic */}
+      {/* Music Player Component */}
       <MusicPlayer source={config.audio.source} isPlaying={isPlaying} />
 
       <AnimatePresence mode="wait">

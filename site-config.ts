@@ -54,7 +54,7 @@ export const config = {
 
   // 6. AUDIO / MUSIK
   audio: {
-    // Link MP3 Hindia - everything u are
+    // Link MP3 Langsung
     source: "https://shallow-gold-onovx4q0gp-dl3exqzf57.edgeone.dev/Hindia%20-%20everything%20u%20are.mp3", 
   },
 
