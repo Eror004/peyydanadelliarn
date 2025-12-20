@@ -21,7 +21,6 @@ export const calculateTimeLeft = (targetDate: string) => {
   };
   
   export const generateICS = (title: string, startDate: string, description: string, location: string) => {
-    // Basic ICS generation
     const formatDate = (date: Date) => date.toISOString().replace(/-|:|\.\d+/g, "");
     const start = new Date(startDate);
     const end = new Date(start.getTime() + 2 * 60 * 60 * 1000); // Assume 2 hours
@@ -50,7 +49,8 @@ END:VCALENDAR`;
     }
   };
 
-  export const getYouTubeId = (url: string) => {
+  export const getYouTubeId = (url: string | null | undefined) => {
+    if (!url || typeof url !== 'string') return null;
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
     const match = url.match(regExp);
     return (match && match[2].length === 11) ? match[2] : null;

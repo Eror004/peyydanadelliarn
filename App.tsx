@@ -21,6 +21,8 @@ const App: React.FC = () => {
   const [activeSection, setActiveSection] = useState('hero');
 
   useEffect(() => {
+    if (!isOpened) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -40,15 +42,19 @@ const App: React.FC = () => {
   }, [isOpened]);
 
   const handleOpen = () => {
+    // Interaction happens HERE
     setIsOpened(true);
-    // Slight delay to ensure DOM is ready for Youtube/Audio trigger if needed
+    // Directly trigger playback state
+    setIsPlaying(true);
+    
+    // Safety check for mobile: force re-play after a small tick
     setTimeout(() => {
         setIsPlaying(true);
     }, 100);
   };
 
   const toggleMusic = () => {
-    setIsPlaying(!isPlaying);
+    setIsPlaying(prev => !prev);
   };
 
   const scrollToSection = (id: string) => {
@@ -61,7 +67,7 @@ const App: React.FC = () => {
       {/* Global Noise Texture */}
       <div className="bg-noise pointer-events-none fixed inset-0 z-[9999]"></div>
 
-      {/* Handles both MP3 and YouTube */}
+      {/* Handles both MP3 and YouTube with optimized logic */}
       <MusicPlayer source={config.audio.source} isPlaying={isPlaying} />
 
       <AnimatePresence mode="wait">

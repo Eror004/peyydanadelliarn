@@ -5,7 +5,6 @@ export const config = {
     names: {
       groom: "Mpey",
       bride: "Adelliarn",
-      // Nama gabungan untuk logo/judul
       full: "Mpey & Adelliarn", 
     },
     hashtag: "#MpeyAdelliarn",
@@ -14,11 +13,8 @@ export const config = {
 
   // 2. WAKTU & TANGGAL
   event: {
-    // Format ISO: YYYY-MM-DDTHH:mm:ss+07:00 (WIB)
     dateIso: "2026-05-25T10:00:00+07:00", 
     displayDate: "Senin, 25 Mei 2026",
-    
-    // Detail Acara
     schedule: {
       akad: {
         title: "AKAD NIKAH",
@@ -37,15 +33,12 @@ export const config = {
   location: {
     name: "Mekarjaya, Ciomas, Bogor",
     address: "Jl. Raya Ciomas No. 123, Bogor, Jawa Barat",
-    // Link Embed Google Maps (Ambil dari Google Maps -> Share -> Embed a map)
     mapsEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.268779698539!2d106.7725!3d-6.6135!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69c5e8c8c8c8c9%3A0x0!2sMekarjaya%2C%20Ciomas%2C%20Bogor!5e0!3m2!1sen!2sid!4v1690000000000!5m2!1sen!2sid",
-    // Link tombol "Petunjuk Arah"
     googleMapsLink: "https://maps.google.com/?q=Mekarjaya,+Ciomas,+Bogor",
   },
 
   // 4. KONTAK & RSVP
   contact: {
-    // Nomor WA format internasional (tanpa +)
     whatsapp: "6283812671022", 
   },
 
@@ -56,27 +49,18 @@ export const config = {
       number: "1234567890",
       holder: "Mpey (Contoh)",
     },
-    // TIPS: Bisa ganti pakai link gambar QRIS kamu sendiri
     qrisUrl: "/images/qris.jpg",
   },
 
   // 6. AUDIO / MUSIK
   audio: {
-    // PENTING: Bisa pakai link MP3 (akhiran .mp3) ATAU link YouTube biasa.
-    // Contoh Youtube: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-    // Contoh MP3: "/music/wedding-song.mp3" (Simpan di public/music/)
-    source: "https://www.youtube.com/watch?v=5qap5aO4i9A", 
+    // Link MP3 Hindia - everything u are
+    source: "https://shallow-gold-onovx4q0gp-dl3exqzf57.edgeone.dev/Hindia%20-%20everything%20u%20are.mp3", 
   },
 
   // 7. GAMBAR & GALERI
-  // CARA GANTI FOTO:
-  // Opsi A: Pakai file lokal (simpan di folder public/images/) -> contoh: "/images/hero.jpg"
-  // Opsi B: Pakai LINK INTERNET (URL) -> contoh: "https://mysite.com/fotoku.jpg"
   images: {
-    // Foto Utama di Halaman Depan
     hero: "/images/hero.jpg", 
-    
-    // Foto-foto di bagian Story/Gallery
     gallery: [
       "/images/1.jpg",
       "/images/2.jpg",
