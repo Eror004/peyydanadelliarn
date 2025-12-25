@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { Splash } from './components/Splash';
 import { Section } from './components/Section';
@@ -12,13 +12,15 @@ import { RSVP } from './components/RSVP';
 import { Wishes } from './components/Wishes';
 import { Gift } from './components/Gift';
 import { Footer } from './components/Footer';
-import { MusicPlayer } from './components/MusicPlayer';
 import { config } from './site-config';
 
 const App: React.FC = () => {
   const [isOpened, setIsOpened] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
+  
+  // Ref langsung ke elemen audio
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   // Scroll Spy Logic
   useEffect(() => {
@@ -35,33 +37,58 @@ const App: React.FC = () => {
     return () => observer.disconnect();
   }, [isOpened]);
 
-  // === FUNGSI KUNCI AGAR LAGU JALAN ===
+  // === STRATEGI AUDIO "NUCLEAR" ===
+  
+  // 1. Sync State React dengan Audio Element
+  useEffect(() => {
+    if (audioRef.current) {
+        if (isPlaying) {
+            // Coba play, tangkap error jika browser blokir
+            audioRef.current.play().catch(err => {
+                console.warn("Autoplay blocked via Effect:", err);
+                // Jangan set isPlaying false disini, biarkan user interaction handler menangani
+            });
+        } else {
+            audioRef.current.pause();
+        }
+    }
+  }, [isPlaying]);
+
+  // 2. Fallback: Global Interaction Listener
+  // Jika tombol OPEN gagal memutar lagu (biasanya di iOS),
+  // sentuhan jari berikutnya di MANA SAJA akan memicu lagu.
+  useEffect(() => {
+    const handleGlobalClick = () => {
+        if (isOpened && isPlaying && audioRef.current && audioRef.current.paused) {
+            audioRef.current.play().then(() => {
+                console.log("Audio started via Global Click Fallback");
+            }).catch(e => console.error("Global click play failed", e));
+        }
+    };
+
+    // Pasang listener di window
+    window.addEventListener('click', handleGlobalClick);
+    window.addEventListener('touchstart', handleGlobalClick);
+
+    return () => {
+        window.removeEventListener('click', handleGlobalClick);
+        window.removeEventListener('touchstart', handleGlobalClick);
+    };
+  }, [isOpened, isPlaying]);
+
+
   const handleOpen = () => {
-    // 1. Ubah state UI
     setIsOpened(true);
     setIsPlaying(true);
     
-    // 2. PAKSA JALAN LANGSUNG (Direct DOM Manipulation)
-    const audioEl = document.getElementById('wedding-audio') as HTMLAudioElement;
-    if (audioEl) {
-        // Reset waktu jika perlu (opsional)
-        // audioEl.currentTime = 0; 
-        audioEl.volume = 0.6;
-        
-        // Promise handling untuk play
-        const playPromise = audioEl.play();
-        
-        if (playPromise !== undefined) {
-            playPromise
-                .then(() => {
-                    console.log("Audio started successfully");
-                })
-                .catch((error) => {
-                    console.error("Audio play failed:", error);
-                    // Fallback: Coba lagi sekali lagi dengan timeout kecil
-                    setTimeout(() => audioEl.play(), 500);
-                });
-        }
+    // 3. Direct Play pada Event Click "OPEN"
+    if (audioRef.current) {
+        audioRef.current.volume = 0.6;
+        audioRef.current.play().then(() => {
+            console.log("Audio started directly on Open");
+        }).catch((error) => {
+            console.error("Audio failed on Open button (Waiting for fallback):", error);
+        });
     }
   };
 
@@ -78,8 +105,17 @@ const App: React.FC = () => {
     <div className="relative w-full h-[100dvh] bg-white text-gen-dark overflow-hidden font-body">
       <div className="bg-noise pointer-events-none fixed inset-0 z-[9999]"></div>
 
-      {/* Music Player diletakkan di sini agar selalu ter-render */}
-      <MusicPlayer source={config.audio.source} isPlaying={isPlaying} />
+      {/* AUDIO ELEMENT DI ROOT - SELALU ADA DI DOM */}
+      {/* Menggunakan opacity 0, bukan hidden, agar browser tidak mematikan resource */}
+      <audio 
+        ref={audioRef}
+        id="wedding-audio"
+        src={config.audio.source}
+        loop
+        preload="auto"
+        playsInline
+        className="fixed bottom-0 left-0 w-1 h-1 opacity-0 pointer-events-none z-[-1]"
+      />
 
       <AnimatePresence mode="wait">
         {!isOpened && <Splash key="splash" onOpen={handleOpen} />}
