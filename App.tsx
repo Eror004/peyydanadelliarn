@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { Splash } from './components/Splash';
 import { Section } from './components/Section';
@@ -19,9 +19,6 @@ const App: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
   
-  // Ref langsung ke elemen audio
-  const audioRef = useRef<HTMLAudioElement>(null);
-
   // Scroll Spy Logic
   useEffect(() => {
     if (!isOpened) return;
@@ -37,63 +34,66 @@ const App: React.FC = () => {
     return () => observer.disconnect();
   }, [isOpened]);
 
-  // === STRATEGI AUDIO "NUCLEAR" ===
-  
-  // 1. Sync State React dengan Audio Element
+  // === AUDIO LOGIC "BRUTE FORCE" ===
+  // Kita pasang "jebakan" interaction. Jika audio belum jalan padahal harusnya jalan (isOpened=true),
+  // sentuhan jari user berikutnya DI MANA SAJA akan memaksa audio nyala.
   useEffect(() => {
-    if (audioRef.current) {
-        if (isPlaying) {
-            // Coba play, tangkap error jika browser blokir
-            audioRef.current.play().catch(err => {
-                console.warn("Autoplay blocked via Effect:", err);
-                // Jangan set isPlaying false disini, biarkan user interaction handler menangani
-            });
-        } else {
-            audioRef.current.pause();
-        }
-    }
-  }, [isPlaying]);
-
-  // 2. Fallback: Global Interaction Listener
-  // Jika tombol OPEN gagal memutar lagu (biasanya di iOS),
-  // sentuhan jari berikutnya di MANA SAJA akan memicu lagu.
-  useEffect(() => {
-    const handleGlobalClick = () => {
-        if (isOpened && isPlaying && audioRef.current && audioRef.current.paused) {
-            audioRef.current.play().then(() => {
-                console.log("Audio started via Global Click Fallback");
-            }).catch(e => console.error("Global click play failed", e));
+    const forcePlay = () => {
+        const audio = document.getElementById('bg-music') as HTMLAudioElement;
+        if (audio && isOpened && isPlaying && audio.paused) {
+            audio.play().then(() => {
+                console.log("Audio forced via global interaction");
+                // Kalau sudah berhasil play, kita cabut listenernya biar ga berat
+                document.removeEventListener('click', forcePlay);
+                document.removeEventListener('touchstart', forcePlay);
+                document.removeEventListener('scroll', forcePlay);
+            }).catch(e => console.error("Force play blocked:", e));
         }
     };
 
-    // Pasang listener di window
-    window.addEventListener('click', handleGlobalClick);
-    window.addEventListener('touchstart', handleGlobalClick);
+    if (isOpened && isPlaying) {
+        document.addEventListener('click', forcePlay);
+        document.addEventListener('touchstart', forcePlay);
+        document.addEventListener('scroll', forcePlay); // Scroll juga dihitung interaksi di beberapa browser
+    }
 
     return () => {
-        window.removeEventListener('click', handleGlobalClick);
-        window.removeEventListener('touchstart', handleGlobalClick);
+        document.removeEventListener('click', forcePlay);
+        document.removeEventListener('touchstart', forcePlay);
+        document.removeEventListener('scroll', forcePlay);
     };
   }, [isOpened, isPlaying]);
-
 
   const handleOpen = () => {
     setIsOpened(true);
     setIsPlaying(true);
     
-    // 3. Direct Play pada Event Click "OPEN"
-    if (audioRef.current) {
-        audioRef.current.volume = 0.6;
-        audioRef.current.play().then(() => {
-            console.log("Audio started directly on Open");
+    // DIRECT DOM ATTACK
+    // Langsung cari elemen dan paksa play saat event click tombol "OPEN" terjadi.
+    // Ini adalah momen paling krusial agar browser mengizinkan audio.
+    const audio = document.getElementById('bg-music') as HTMLAudioElement;
+    if (audio) {
+        audio.volume = 0.5; // Mulai volume sedang
+        audio.play().then(() => {
+            console.log("Audio started immediately!");
         }).catch((error) => {
-            console.error("Audio failed on Open button (Waiting for fallback):", error);
+            console.warn("Autoplay blocked immediately, waiting for fallback...", error);
+            // Fallback akan ditangani oleh useEffect di atas
         });
     }
   };
 
   const toggleMusic = () => {
-    setIsPlaying(prev => !prev);
+    const audio = document.getElementById('bg-music') as HTMLAudioElement;
+    if (!audio) return;
+
+    if (audio.paused) {
+        audio.play();
+        setIsPlaying(true);
+    } else {
+        audio.pause();
+        setIsPlaying(false);
+    }
   };
 
   const scrollToSection = (id: string) => {
@@ -104,17 +104,15 @@ const App: React.FC = () => {
   return (
     <div className="relative w-full h-[100dvh] bg-white text-gen-dark overflow-hidden font-body">
       <div className="bg-noise pointer-events-none fixed inset-0 z-[9999]"></div>
-
-      {/* AUDIO ELEMENT DI ROOT - SELALU ADA DI DOM */}
-      {/* Menggunakan opacity 0, bukan hidden, agar browser tidak mematikan resource */}
+      
+      {/* ELEMENT AUDIO INI SELALU ADA DI DOM, TIDAK DI-RENDER KONDISIONAL */}
       <audio 
-        ref={audioRef}
-        id="wedding-audio"
+        id="bg-music"
         src={config.audio.source}
         loop
         preload="auto"
-        playsInline
-        className="fixed bottom-0 left-0 w-1 h-1 opacity-0 pointer-events-none z-[-1]"
+        playsInline // Penting buat iOS
+        className="hidden" // Sembunyikan visualnya
       />
 
       <AnimatePresence mode="wait">
