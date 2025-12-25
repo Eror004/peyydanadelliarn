@@ -20,40 +20,48 @@ const App: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
 
+  // Scroll Spy Logic
   useEffect(() => {
     if (!isOpened) return;
-
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
+          if (entry.isIntersecting) setActiveSection(entry.target.id);
         });
       },
       { threshold: 0.5 }
     );
-
-    document.querySelectorAll('section').forEach((section) => {
-      observer.observe(section);
-    });
-
+    document.querySelectorAll('section').forEach((section) => observer.observe(section));
     return () => observer.disconnect();
   }, [isOpened]);
 
+  // === FUNGSI KUNCI AGAR LAGU JALAN ===
   const handleOpen = () => {
-    // 1. Set State
+    // 1. Ubah state UI
     setIsOpened(true);
     setIsPlaying(true);
     
-    // 2. FORCE PLAY AUDIO DIRECTLY (Bypasses Browser Autoplay Block)
-    // This connects the "Click" directly to the "Play" command
-    const audioElement = document.getElementById('wedding-audio') as HTMLAudioElement;
-    if (audioElement) {
-        audioElement.volume = 0.6; // Set volume to 60% so it's not too loud
-        audioElement.play().catch((e) => {
-            console.error("Audio play failed:", e);
-        });
+    // 2. PAKSA JALAN LANGSUNG (Direct DOM Manipulation)
+    const audioEl = document.getElementById('wedding-audio') as HTMLAudioElement;
+    if (audioEl) {
+        // Reset waktu jika perlu (opsional)
+        // audioEl.currentTime = 0; 
+        audioEl.volume = 0.6;
+        
+        // Promise handling untuk play
+        const playPromise = audioEl.play();
+        
+        if (playPromise !== undefined) {
+            playPromise
+                .then(() => {
+                    console.log("Audio started successfully");
+                })
+                .catch((error) => {
+                    console.error("Audio play failed:", error);
+                    // Fallback: Coba lagi sekali lagi dengan timeout kecil
+                    setTimeout(() => audioEl.play(), 500);
+                });
+        }
     }
   };
 
@@ -68,10 +76,9 @@ const App: React.FC = () => {
 
   return (
     <div className="relative w-full h-[100dvh] bg-white text-gen-dark overflow-hidden font-body">
-      {/* Global Noise Texture */}
       <div className="bg-noise pointer-events-none fixed inset-0 z-[9999]"></div>
 
-      {/* Music Player Component */}
+      {/* Music Player diletakkan di sini agar selalu ter-render */}
       <MusicPlayer source={config.audio.source} isPlaying={isPlaying} />
 
       <AnimatePresence mode="wait">

@@ -8,73 +8,50 @@ interface MusicPlayerProps {
 }
 
 export const MusicPlayer: React.FC<MusicPlayerProps> = ({ source, isPlaying }) => {
-  const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   
   const youtubeId = source ? getYouTubeId(source) : null;
   const isYouTube = !!youtubeId;
 
-  // Function to send commands to YouTube Iframe
-  const sendCommand = (func: string, args: any[] = []) => {
-    try {
-      if (iframeRef.current && iframeRef.current.contentWindow) {
-        iframeRef.current.contentWindow.postMessage(
-          JSON.stringify({ event: 'command', func, args }),
-          '*'
-        );
-      }
-    } catch (e) {
-      console.warn("YouTube control error:", e);
-    }
-  };
-
-  // React State Handling (For toggling music via the floating button)
+  // Toggle Play/Pause berdasarkan state (Untuk tombol floating music)
   useEffect(() => {
-    if (isYouTube) {
+    if (!isYouTube && audioRef.current) {
       if (isPlaying) {
-        sendCommand('playVideo');
+        // SAFETY CHECK: Hanya play jika sedang pause
+        // Ini mencegah error "The play() request was interrupted" jika App.tsx sudah memainkannya duluan
+        if (audioRef.current.paused) {
+          const playPromise = audioRef.current.play();
+          if (playPromise !== undefined) {
+             playPromise.catch(e => console.log("State play blocked (handled):", e));
+          }
+        }
       } else {
-        sendCommand('pauseVideo');
-      }
-    } else {
-      if (audioRef.current) {
-        if (isPlaying) {
-          // We catch the error here just in case, but the main play 
-          // should happen in App.tsx handleOpen for the first time
-          audioRef.current.play().catch(err => {
-            console.log("State-based play blocked (expected if no interaction):", err);
-          });
-        } else {
-          audioRef.current.pause();
+        // Pause jika sedang playing
+        if (!audioRef.current.paused) {
+           audioRef.current.pause();
         }
       }
     }
   }, [isPlaying, isYouTube]);
 
-  // If YouTube
+  // Render YouTube (Legacy support)
   if (isYouTube && youtubeId) {
     const origin = typeof window !== 'undefined' ? window.location.origin : '';
-    // Added allow="autoplay" explicitly
-    const embedUrl = `https://www.youtube.com/embed/${youtubeId}?enablejsapi=1&autoplay=1&mute=0&controls=0&loop=1&playlist=${youtubeId}&origin=${origin}&playsinline=1&rel=0`;
-
     return (
-      <div className="fixed -bottom-[500px] left-0 w-1 h-1 opacity-0 pointer-events-none z-[-1] overflow-hidden">
+      <div className="fixed -bottom-[200px] left-0 w-1 h-1 opacity-0 pointer-events-none">
         <iframe
-          ref={iframeRef}
           id="youtube-player"
           width="100%"
           height="100%"
-          src={embedUrl}
+          src={`https://www.youtube.com/embed/${youtubeId}?enablejsapi=1&autoplay=1&mute=0&controls=0&loop=1&playlist=${youtubeId}&origin=${origin}&playsinline=1`}
           title="Wedding Music"
           allow="autoplay; encrypted-media"
-          style={{ border: 0 }}
         />
       </div>
     );
   }
 
-  // If Direct MP3
-  // PENTING: ID "wedding-audio" digunakan oleh App.tsx untuk memaksa play saat tombol diklik
+  // Render MP3 Native
   return (
     <audio 
       ref={audioRef}
@@ -82,8 +59,9 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ source, isPlaying }) =
       src={source} 
       loop 
       preload="auto"
-      className="hidden"
-      aria-hidden="true"
+      // PENTING: playsInline membantu stabilitas di iOS Safari
+      playsInline
+      className="fixed bottom-0 left-0 w-1 h-1 opacity-0 pointer-events-none z-[-1]" 
     />
   );
 };
